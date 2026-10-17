@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Users,
   ShieldCheck,
@@ -22,7 +22,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const riskTrendData = [
+const riskTrendData30D = [
   { date: "Sep 15", low: 82, mod: 15, high: 3 },
   { date: "Sep 18", low: 88, mod: 10, high: 2 },
   { date: "Sep 21", low: 85, mod: 12, high: 3 },
@@ -31,6 +31,16 @@ const riskTrendData = [
   { date: "Sep 30", low: 86, mod: 11, high: 3 },
   { date: "Oct 03", low: 90, mod: 8,  high: 2 },
   { date: "Oct 06", low: 85, mod: 12, high: 3 },
+  { date: "Oct 08", low: 87, mod: 10, high: 3 },
+];
+
+const riskTrendData90D = [
+  { date: "Jul 15", low: 80, mod: 16, high: 4 },
+  { date: "Jul 30", low: 83, mod: 14, high: 3 },
+  { date: "Aug 15", low: 81, mod: 15, high: 4 },
+  { date: "Aug 30", low: 86, mod: 11, high: 3 },
+  { date: "Sep 15", low: 82, mod: 15, high: 3 },
+  { date: "Sep 30", low: 86, mod: 11, high: 3 },
   { date: "Oct 08", low: 87, mod: 10, high: 3 },
 ];
 
@@ -53,6 +63,10 @@ const pieData = [
 ];
 
 export default function Dashboard() {
+  const [timeRange, setTimeRange] = useState("30D");
+
+  const currentTrendData = timeRange === "30D" ? riskTrendData30D : riskTrendData90D;
+
   return (
     <div style={{ padding: "24px", backgroundColor: "#070C14", minHeight: "100vh", color: "#f1f5f9", fontFamily: "sans-serif" }}>
       <style>{`
@@ -127,15 +141,45 @@ export default function Dashboard() {
               </h3>
               <p style={{ fontSize: "11px", color: "#94a3b8", margin: "4px 0 0 0" }}>Percentage of athletes in each risk category over time</p>
             </div>
-            <div style={{ backgroundColor: "#141E33", padding: "4px", borderRadius: "8px", border: "1px solid #334155" }}>
-              <button style={{ padding: "4px 10px", borderRadius: "4px", backgroundColor: "#2563eb", color: "#fff", border: "none", fontSize: "11px" }}>30D</button>
-              <button style={{ padding: "4px 10px", backgroundColor: "transparent", color: "#94a3b8", border: "none", fontSize: "11px" }}>90D</button>
+            
+            {/* Interactive 30D / 90D Toggle */}
+            <div style={{ backgroundColor: "#141E33", padding: "4px", borderRadius: "8px", border: "1px solid #334155", display: "flex", gap: "2px" }}>
+              <button 
+                onClick={() => setTimeRange("30D")}
+                style={{ 
+                  padding: "4px 10px", 
+                  borderRadius: "4px", 
+                  backgroundColor: timeRange === "30D" ? "#2563eb" : "transparent", 
+                  color: timeRange === "30D" ? "#fff" : "#94a3b8", 
+                  border: "none", 
+                  fontSize: "11px",
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                30D
+              </button>
+              <button 
+                onClick={() => setTimeRange("90D")}
+                style={{ 
+                  padding: "4px 10px", 
+                  borderRadius: "4px", 
+                  backgroundColor: timeRange === "90D" ? "#2563eb" : "transparent", 
+                  color: timeRange === "90D" ? "#fff" : "#94a3b8", 
+                  border: "none", 
+                  fontSize: "11px",
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                90D
+              </button>
             </div>
           </div>
 
           <div style={{ height: "240px", width: "100%" }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={riskTrendData}>
+              <LineChart data={currentTrendData}>
                 <CartesianGrid stroke="#1E293B" vertical={false} />
                 <XAxis dataKey="date" stroke="#64748B" fontSize={10} tickLine={false} axisLine={false} />
                 <YAxis stroke="#64748B" fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} />

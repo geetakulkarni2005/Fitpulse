@@ -3,7 +3,6 @@ import {
   Bell,
   ChevronDown,
   Menu,
-  Search,
   Phone,
   Mail,
   Shield,
@@ -16,7 +15,7 @@ import {
   AlertTriangle
 } from "lucide-react";
 
-function Header({ onMenuClick, searchTerm, setSearchTerm }) {
+function Header({ onMenuClick }) {
   const [coachImage, setCoachImage] = useState(() => {
     return localStorage.getItem("fitpulse_coach_image") || "";
   });
@@ -77,17 +76,7 @@ function Header({ onMenuClick, searchTerm, setSearchTerm }) {
         </div>
 
         <div className="header-right">
-          {/* Active Search Bar */}
-          <div className="header-search">
-            <Search size={14} />
-            <input
-              type="text"
-              placeholder="Search athlete by ID or name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
+          {/* Bell Notifications Dropdown */}
           <div style={{ position: "relative" }}>
             <button 
               className="header-icon" 
@@ -95,7 +84,18 @@ function Header({ onMenuClick, searchTerm, setSearchTerm }) {
                 setIsNotificationsOpen(!isNotificationsOpen);
                 setIsProfileOpen(false);
               }}
-              style={{ cursor: "pointer", position: "relative", background: "transparent", border: "1px solid #334155", borderRadius: "8px", padding: "8px", color: "#94a3b8", display: "flex", alignItems: "center", justifyContent: "center" }}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+                background: "transparent",
+                border: "1px solid #334155",
+                borderRadius: "8px",
+                padding: "8px",
+                color: "#94a3b8",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
             >
               <Bell size={17} />
               <span style={{ position: "absolute", top: "4px", right: "4px", width: "8px", height: "8px", background: "#ef4444", borderRadius: "50%" }}></span>
@@ -123,6 +123,7 @@ function Header({ onMenuClick, searchTerm, setSearchTerm }) {
             )}
           </div>
 
+          {/* Coach Profile Trigger */}
           <div 
             className="coach-profile" 
             onClick={() => {
@@ -153,6 +154,7 @@ function Header({ onMenuClick, searchTerm, setSearchTerm }) {
         </div>
       </header>
 
+      {/* Profile Modal */}
       {isProfileOpen && (
         <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", backgroundColor: "rgba(7, 12, 20, 0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, backdropFilter: "blur(6px)" }}>
           <div style={{ background: "#0D1527", border: "1px solid #334155", borderRadius: "20px", width: "440px", padding: "32px", boxShadow: "0 20px 50px rgba(0,0,0,0.8)", position: "relative", color: "#fff", fontFamily: "sans-serif" }}>
